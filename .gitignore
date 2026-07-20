@@ -1,0 +1,11 @@
+data/
+
+cpp/build/
+*.o
+*.so
+
+python/__pycache__/
+*.pyc
+
+*.pth
+*.ckpt
