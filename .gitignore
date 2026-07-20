@@ -1,5 +1,7 @@
 data/
 
+scratch/
+
 cpp/build/
 *.o
 *.so
