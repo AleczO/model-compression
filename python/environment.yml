@@ -1,0 +1,14 @@
+name: model-compression
+channels:
+  - pytorch
+  - nvidia
+  - defaults
+dependencies:
+  - python=3.11
+  - pytorch
+  - torchaudio
+  - pytorch-cuda=12.1
+  - mkl<2024
+  - mkl-service<2024
+  - numpy
+  - matplotlib
