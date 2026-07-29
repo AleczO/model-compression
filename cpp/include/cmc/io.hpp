@@ -12,7 +12,6 @@ struct RawTensor {
     std::vector<float> data;
 };
 
-
 std::vector<RawTensor> load_weights(const std::string& path);
 
 }

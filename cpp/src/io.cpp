@@ -29,9 +29,9 @@ std::vector<RawTensor> load_weights(const std::string& path) {
     for (uint32_t i = 0; i < num_tensors; ++i) {
         RawTensor t;
 
-        // uint32_t name_len = read_u32(f);
-        // t.name.resize(name_len);
-        // f.read(&t.name[0], name_len);
+        uint32_t name_len = read_u32(f);
+        t.name.resize(name_len);
+        f.read(&t.name[0], name_len);    
 
         uint32_t ndim = read_u32(f);
         t.shape.resize(ndim);
