@@ -3,8 +3,17 @@
 
 namespace cmc{
 
-float compute_scale(const Tensor& t_class);
-Tensor quantize(const Tensor& t_class);
+struct QuantTensor{
+    Tensor tensor;
+    float scale;
+};
+
+float compute_scale(const Tensor& original);
+
+
+QuantTensor quantize(const Tensor& original);
+Tensor dequantize(const QuantTensor& quantized);
+
     
 }
 

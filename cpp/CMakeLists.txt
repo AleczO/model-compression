@@ -14,6 +14,7 @@ add_library(cmc_core
     src/tensor.cpp
     src/io.cpp
     src/quantization.cpp
+    src/metrics.cpp
 )
 
 target_include_directories(cmc_core PUBLIC include)
