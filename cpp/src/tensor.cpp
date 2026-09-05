@@ -4,21 +4,20 @@
 
 namespace cmc {
 
-Tensor::Tensor(std::vector<uint32_t> shape)
-    : shape_(std::move(shape)) {
+
+Tensor::Tensor(std::string name, std::vector<uint32_t> shape)
+    : name_(std::move(name)), shape_(std::move(shape)) {
     size_t total = std::accumulate(shape_.begin(), shape_.end(),
                                     size_t(1), std::multiplies<>());
     data_.resize(total);
-
 }
 
-Tensor::Tensor(std::vector<uint32_t> shape, std::vector<float> data)
-    : shape_(std::move(shape)), data_(std::move(data)) {
+Tensor::Tensor(std::string name, std::vector<uint32_t> shape, std::vector<float> data) 
+:  name_(std::move(name)), shape_(std::move(shape)), data_(std::move(data)) {
      size_t expected = std::accumulate(shape_.begin(), shape_.end(),
                                         size_t(1), std::multiplies<>());
     if (data_.size() != expected)
         throw std::invalid_argument("Tensor: data size does not match shape");
-
 }
 
 float& Tensor::at(std::initializer_list<uint32_t> indices) {
@@ -35,6 +34,10 @@ std::vector<float>& Tensor::data() {
 
 const std::vector<float>& Tensor::data() const {
     return data_;
+}
+
+const std::string& Tensor::name() {
+    return name_;
 }
 
 size_t Tensor::flatten_index(std::initializer_list<uint32_t> indices) const {
