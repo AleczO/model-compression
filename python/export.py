@@ -8,9 +8,8 @@ OUTPUT_PATH = "../data/exported/weights.bin"
 
 def export_state_dict(state_dict, output_path):
 
-
-
     with open(output_path, "wb") as f:
+        
         f.write(b"RES8")  
         f.write(struct.pack("<I", 1))  
         f.write(struct.pack("<I", len(state_dict)))

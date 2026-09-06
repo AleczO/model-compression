@@ -11,23 +11,27 @@
 namespace cmc{
 
 namespace {
+
+void check_magic(std::ifstream &f) {
+    std::array<char, 4> magic{};
+    f.read(magic.data(), magic.size());
+
+    constexpr std::array<char, 4> expected = {'R', 'E', 'S', '8'};
+
+    if(magic != expected){
+        throw std::runtime_error("Invaid file format");
+    }
+}
     
-    uint32_t read_u32(std::ifstream& f) {
-        uint32_t value;
-        f.read(reinterpret_cast<char*>(&value), sizeof(value));
-        return value;
-    }
+uint32_t read_u32(std::ifstream& f) {
+    uint32_t value;
+    f.read(reinterpret_cast<char*>(&value), sizeof(value));
+    return value;
+}
 
-    void check_magic(std::ifstream &f) {
-        std::array<char, 4> magic{};
-        f.read(magic.data(), magic.size());
-
-        constexpr std::array<char, 4> expected = {'R', 'E', 'S', '8'};
-
-        if(magic != expected){
-            throw std::runtime_error("Invaid file format");
-        }
-    }
+void write_u32(std::ofstream& f, uint32_t value) {
+    f.write(reinterpret_cast<const char*>(&value), sizeof(value));
+}
 
 }
 
@@ -76,6 +80,34 @@ std::vector<cmc::Tensor> load_weights(const std::string& path) {
     }
 
     return tensors;
+}
+
+void write_weights(const std::string& path, std::vector<Tensor>& net){
+    std::ofstream f(path, std::ios::binary);
+    std::string arch = "RES8";
+
+    f.write(&arch[0], arch.size());
+
+    write_u32(f, 1);
+    write_u32(f, net.size());
+
+    
+    for (uint32_t i = 0; i < net.size(); ++i) {
+        std::string name = net[i].name(); 
+        write_u32(f, static_cast<uint32_t>(name.size()));
+        f.write(&name[0], name.size());    
+        
+        std::vector<uint32_t> shape = net[i].shape();
+        write_u32(f, static_cast<uint32_t>(shape.size()));
+        for (uint32_t d = 0; d < shape.size(); ++d) {
+            write_u32(f, shape[d]);
+        }
+
+        std::vector<float> data = net[i].data();
+        f.write(reinterpret_cast<const char*>(data.data()), data.size() * sizeof(float));
+    }
+
+    return;
 }
 
 }
